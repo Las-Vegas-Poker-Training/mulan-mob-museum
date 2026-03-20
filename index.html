@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes" />
+  <title>Zynga Mob Museum | Mulan Event Control Panel</title>
+  <style>
+    /* =========================
+       BLOCK 1 START - ROOT TOKENS (CRISP & SCALABLE)
+       ========================= */
+    :root {
+      --bg: #0f1115;
+      --bg-soft: #171a21;
+      --card: #1d2330;
+      --card-2: #222a38;
+      --text: #f5f7fb;
+      --muted: #b3bdd1;
+      --line: rgba(255,255,255,0.10);
+      --accent: #d6a84f;
+      --accent-2: #ffcf70;    /* yellow for times */
+      --zynga-red: #DC0606;    /* red for titles */
+      --good: #7ee787;
+      --warn: #ffcc66;
+      --danger: #ff8c8c;
+      --shadow: 0 18px 40px rgba(0,0,0,0.35);
+      --radius: 18px;
+      --radius-sm: 12px;
+      --max: 1024px;
+    }
+    /* =========================
+       BLOCK 1 END - ROOT TOKENS
+       ========================= */
+
+    /* =========================
+       BLOCK 2 START - BASE + EXTRA CRISP RENDERING
+       ========================= */
+    * { 
+      box-sizing: border-box; 
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background:
+        radial-gradient(circle at top right, rgba(214,168,79,0.14), transparent 28%),
+        linear-gradient(180deg, #0b0d12 0%, #12151c 100%);
+      color: var(--text);
+      font-family: system-ui, -apple-system, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      min-height: 100vh;
+      padding: clamp(14px, 2.5vw, 28px);
+    }
+
+    a {
+      color: var(--accent-2);
+      text-decoration: none;
+      word-break: break-word;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    button, select {
+      font: inherit;
+      border: 0;
+      cursor: pointer;
+    }
+
+    select {
+      background: linear-gradient(180deg, var(--card), var(--card-2));
+      border: 1px solid var(--line);
+      border-radius: 48px;
+      padding: 12px 16px;
+      color: var(--text);
+      font-weight: 500;
+      width: 100%;
+      appearance: none;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23ffcf70' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      background-size: 18px;
+    }
+    /* =========================
+       BLOCK 2 END - BASE
+       ========================= */
+
+    /* =========================
+       BLOCK 3 START - LAYOUT (ULTRA RESPONSIVE)
+       ========================= */
+    .app {
+      width: 100%;
+      max-width: var(--max);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(14px, 2vw, 22px);
+    }
+
+    .panel {
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      backdrop-filter: blur(6px);
+      transition: all 0.2s ease;
+    }
+
+    .panel-inner {
+      padding: clamp(18px, 2.5vw, 26px);
+    }
+
+    .hero {
+      position: relative;
+      background:
+        linear-gradient(135deg, rgba(214,168,79,0.18), rgba(255,255,255,0.02)),
+        linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+    }
+
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.5rem, 4vw, 2.4rem);
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+    }
+
+    .subhead {
+      color: var(--muted);
+      font-size: clamp(0.95rem, 1.8vw, 1.08rem);
+      line-height: 1.5;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .pill {
+      background: linear-gradient(180deg, var(--card), var(--card-2));
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+    }
+
+    .label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .value {
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.3;
+      word-break: break-word;
+    }
+
+    .section-title {
+      margin: 0 0 16px;
+      font-size: clamp(1.2rem, 2.2vw, 1.5rem);
+      font-weight: 700;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .note-card, .action-card {
+      background: linear-gradient(180deg, var(--card), var(--card-2));
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+    }
+
+    .mini-title {
+      margin: 0 0 10px;
+      font-weight: 800;
+      font-size: 1rem;
+    }
+
+    .note-list, .quick-list {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .note-list li + li, .quick-list li + li {
+      margin-top: 8px;
+    }
+
+    .callout {
+      border-left: 4px solid var(--accent);
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: rgba(214,168,79,0.08);
+      margin-top: 16px;
+      font-weight: 500;
+    }
+    /* =========================
+       BLOCK 3 END - LAYOUT
+       ========================= */
+
+    /* =========================
+       BLOCK 4 START - CONTACT DROPDOWN (SPACE SAVER)
+       ========================= */
+    .compact-contact {
+      margin-top: 6px;
+    }
+    .contact-detail-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin-top: 14px;
+    }
+    .contact-detail-name {
+      font-size: 1.2rem;
+      font-weight: 800;
+      margin: 0 0 4px;
+    }
+    .contact-detail-role {
+      color: var(--accent-2);
+      font-size: 0.85rem;
+      margin-bottom: 12px;
+    }
+    .contact-detail-line {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+      word-break: break-word;
+    }
+    .contact-note {
+      font-size: 0.85rem;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      margin-top: 10px;
+      padding-top: 8px;
+    }
+    /* =========================
+       BLOCK 4 END - CONTACT DROPDOWN
+       ========================= */
+
+    /* =========================
+       BLOCK 5 START - TIMELINE / CHECKLIST (ZYNGARED STYLES)
+       ========================= */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .step {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .step-head {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      align-items: center;
+      width: 100%;
+      padding: 14px 18px;
+      background: linear-gradient(180deg, rgba(214,168,79,0.1), rgba(255,255,255,0.02));
+      text-align: left;
+      font-weight: 600;
+    }
+
+    .step-badge {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 40px;
+      background: rgba(220,6,6,0.2);
+      border: 1px solid rgba(220,6,6,0.45);
+      font-weight: 800;
+      color: var(--zynga-red);
+    }
+
+    /* Times in yellow (accent-2) */
+    .step-time {
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent-2);
+    }
+
+    /* Titles in Zynga red */
+    .step-title {
+      font-size: 1rem;
+      font-weight: 800;
+      line-height: 1.3;
+      color: var(--zynga-red);
+    }
+
+    .caret {
+      font-size: 1.2rem;
+      transition: transform 0.2s;
+      color: var(--muted);
+    }
+
+    .step.open .caret {
+      transform: rotate(180deg);
+    }
+
+    .step-body {
+      display: none;
+      padding: 18px;
+      border-top: 1px solid var(--line);
+      background: rgba(0,0,0,0.2);
+    }
+
+    .step.open .step-body {
+      display: block;
+    }
+
+    .checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .check-item {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .check-item input[type="checkbox"] {
+      margin-top: 2px;
+      width: 20px;
+      height: 20px;
+      accent-color: #DC0606;
+      flex-shrink: 0;
+    }
+
+    .check-item.done span {
+      text-decoration: line-through;
+      opacity: 0.7;
+    }
+
+    .split {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      margin: 12px 0 8px;
+    }
+
+    .action-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 10px 0 8px;
+    }
+
+    .btn {
+      padding: 12px 20px;
+      border-radius: 60px;
+      background: linear-gradient(180deg, #d6a84f, #b78b38);
+      color: #18130b;
+      font-weight: 800;
+      font-size: 0.9rem;
+      box-shadow: 0 8px 18px rgba(214,168,79,0.25);
+      transition: 0.1s linear;
+    }
+
+    .btn.alt {
+      background: linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.03));
+      color: var(--text);
+      border: 1px solid var(--line);
+      box-shadow: none;
+    }
+
+    .status-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+    }
+
+    .status-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 40px;
+      background: rgba(126,231,135,0.12);
+      color: var(--good);
+      border: 1px solid rgba(126,231,135,0.25);
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .status-chip.warn {
+      background: rgba(220,6,6,0.1);
+      color: var(--zynga-red);
+      border-color: rgba(220,6,6,0.3);
+    }
+
+    .footer-note {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+      padding: 8px 6px;
+    }
+
+    @media (max-width: 580px) {
+      .step-head {
+        grid-template-columns: auto 1fr;
+        gap: 10px;
+      }
+      .caret {
+        display: none;
+      }
+      .btn {
+        width: 100%;
+        text-align: center;
+      }
+      .action-row {
+        flex-direction: column;
+      }
+      .status-bar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+    /* =========================
+       BLOCK 5 END - TIMELINE / CHECKLIST
+       ========================= */
+  </style>
+</head>
+<body>
+  <main class="app">
+    <!-- HERO SECTION - CLEAN, NO EMOJIS, NO "You've got this!" -->
+    <section class="panel hero">
+      <div class="panel-inner">
+        <h1>Zynga Mob Museum<br>Mulan Run of Show</h1>
+        <p class="subhead">
+          A mobile-friendly checklist to help you glide through the evening. 
+          Keep transitions smooth, stay ahead, and let the good vibes roll.
+        </p>
+        <div class="meta-grid">
+          <div class="pill"><div class="label">Date</div><div class="value">Thursday, March 26, 2026</div></div>
+          <div class="pill"><div class="label">Venue</div><div class="value">Mob Museum</div></div>
+          <div class="pill"><div class="label">Spaces</div><div class="value">Oscar B. Goodman Room + Distillery</div></div>
+          <div class="pill"><div class="label">Role</div><div class="value">Mulan | On-Site Liaison</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT SECTION: DROPDOWN WITH BUSINESS CONNECTION (NO EMOJIS) -->
+    <section class="panel">
+      <div class="panel-inner compact-contact">
+        <h2 class="section-title" style="margin-bottom: 12px;">Your Support Team</h2>
+        <select id="contactSelect" aria-label="Select contact person"></select>
+        <div id="contactDetail" class="contact-detail-card">
+          <div class="contact-detail-name">Matt Carpenter</div>
+          <div class="contact-detail-role">Las Vegas Poker Training</div>
+          <div class="contact-detail-line">Phone: <a href="tel:16167457148">616-745-7148</a></div>
+          <div class="contact-detail-line">Email: <a href="mailto:book@pokertraininglasvegas.com">book@pokertraininglasvegas.com</a></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUICK NOTES + PHOTO GUIDANCE (NO EMOJIS) -->
+    <section class="panel">
+      <div class="panel-inner two-col">
+        <article class="note-card">
+          <h3 class="mini-title">Friendly Reminders</h3>
+          <ul class="note-list">
+            <li>Cans only for the tour — easy to carry and no glass worries.</li>
+            <li>Streeter will meet you before the event with chips, cards, and the whisky glass. Coordinate with museum staff for a safe spot to keep them until showtime.</li>
+            <li>Tournament structure will be shared separately — feel free to ask if you need a copy.</li>
+          </ul>
+        </article>
+        <article class="note-card">
+          <h3 class="mini-title">Photo & Video Guidance</h3>
+          <ul class="note-list">
+            <li>Snap candid moments and short videos when the mood is right — guests love memories!</li>
+            <li>Please keep everything offline (no social media). We'll share the final album after the event.</li>
+            <li>If Shelly requests content directly, feel free to forward to her as well.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- QUICK ACTIONS + ENCOURAGING STATUS (NO EMOJIS) -->
+    <section class="panel">
+      <div class="panel-inner">
+        <h2 class="section-title">Quick Helpers</h2>
+        <div class="action-row">
+          <button class="btn" id="expandAllBtn">Expand All Steps</button>
+          <button class="btn alt" id="collapseAllBtn">Collapse All Steps</button>
+          <button class="btn alt" id="resetChecksBtn">Reset All Checklists</button>
+          <button class="btn alt" id="printBtn">Print / PDF</button>
+        </div>
+        <div class="status-bar">
+          <div class="status-chip" id="progressChip">0 tasks complete</div>
+          <div class="status-chip warn">Stay 5–10 minutes ahead to keep everything smooth.</div>
+        </div>
+        <div class="callout">
+          We know you are going to make this an awesome experience — trust your instincts and enjoy the night.
+        </div>
+      </div>
+    </section>
+
+    <!-- TIMELINE CHECKLIST (NO EMOJIS, TIMES YELLOW, TITLES RED) -->
+    <section class="panel">
+      <div class="panel-inner">
+        <h2 class="section-title">Timeline Checklist</h2>
+        <div class="timeline" id="timeline">
+          <!-- STEP 1: 4:30–4:50 Pre-Event -->
+          <article class="step open">
+            <button class="step-head" type="button">
+              <div class="step-badge">1</div>
+              <div>
+                <div class="step-time">4:30 PM – 4:50 PM</div>
+                <div class="step-title">Pre-Event Warm-up</div>
+              </div>
+              <div class="caret">▾</div>
+            </button>
+            <div class="step-body">
+              <div class="checklist">
+                <label class="check-item"><input type="checkbox" data-check="pre-arrival-1"><span>Arrive by 4:30 and connect with Jessica or Christi — they're ready to help.</span></label>
+                <label class="check-item"><input type="checkbox" data-check="pre-arrival-2"><span>Chat with museum about the perfect moment for the group photo (before or after tour).</span></label>
+                <label class="check-item"><input type="checkbox" data-check="pre-arrival-3"><span>Double‑check that only canned beverages go on tour — keeps it simple and safe.</span></label>
+                <label class="check-item"><input type="checkbox" data-check="pre-arrival-4"><span>Friendly heads‑up to staff: welcome shots and Yaron’s Moscow Mule ready for distillery entry.</span></label>
+              </div>
+            </div>
+          </article>
+
+          <article class="step">
+            <button class="step-head" type="button">
+              <div class="step-badge">2</div>
+              <div>
+                <div class="step-time">4:50 PM</div>
+                <div class="step-title">Welcome Guests</div>
+              </div>
+              <div class="caret">▾</div>
+            </button>
+            <div class="step-body"><div class="checklist"><label class="check-item"><input type="checkbox" data-check="arrival-1"><span>Be at the entrance with a warm smile — first impressions matter.</span></label><label class="check-item"><input type="checkbox" data-check="arrival-2"><span>Guide guests inside with confidence.</span></label></div></div>
+          </article>
+
+          <article class="step">
+            <button class="step-head" type="button"><div class="step-badge">3</div><div><div class="step-time">4:50 PM – 5:10 PM</div><div class="step-title">Welcome Drinks (Oscar B. Goodman Room)</div></div><div class="caret">▾</div></button>
+            <div class="step-body"><div class="checklist"><label class="check-item"><input type="checkbox" data-check="drinks-1"><span>Make sure guests feel at home in the Oscar B. Goodman Room.</span></label><label class="check-item"><input type="checkbox" data-check="drinks-2"><span>Encourage a first drink, and kindly remind about the “cans only” tour rule.</span></label></div></div>
+          </article>
+
+          <article class="step">
+            <button class="step-head" type="button"><div class="step-badge">4</div><div><div class="step-time">5:10 PM – 5:15 PM</div><div class="step-title">Tour Staging</div></div><div class="caret">▾</div></button>
+            <div class="step-body"><div class="checklist"><label class="check-item"><input type="checkbox" data-check="tourstage-1"><span>Gather the group — everyone’s excited to start the tour.</span></label><label class="check-item"><input type="checkbox" data-check="tourstage-2"><span>Check in with the tour guide; they’re ready to share amazing stories.</span></label></div></div>
+          </article>
+
+          <article class="step">
+            <button class="step-head" type="button"><div class="step-badge">5</div><div><div class="step-time">5:15 PM – 6:00 PM</div><div class="step-title">Guided Tour</div></div><div class="caret">▾</div></button>
+            <div class="step-body"><div class="checklist"><label class="check-item"><input type="checkbox" data-check="tour-1"><span>Be present and available — just in case anyone needs a little assistance.</span></label><label class="check-item"><input type="checkbox" data-check="tour-2"><span>Nod to the museum about the group photo timing (before or after).</span></label><label class="check-item"><input type="checkbox" data-check="tour-3"><span>Snap a few natural photos or short videos when the moment feels right.</span></label></div></div>
+          </article>
+
+          <article class="step">
+            <button class="step-head" type="button"><div class="step-badge">6</div><div><div class="step-time">6:00 PM – 6:45 PM</div><div class="step-title">Frank + Drinks + Appetizers</div></div><div class="caret">▾</div></button>
+            <div class="step-body"><div class="checklist"><label class="check-item"><input type="checkbox" data-check="frank-1"><span>Guests settle back into the Oscar B. Goodman Room — relaxed and happy.</span></label><label class="check-item"><input type="checkbox" data-check="frank-2"><span>Enjoy the vibe with Frank, drinks, and delicious appetizers.</span></label><label class="check-item"><input type="checkbox" data-check="frank-3"><span>Capture a few candid moments (no rush, just when it feels natural).</span></label></div></div>
+          </article>
+
+          <article class="step">
+            <button class="step-head" type="button"><div class="step-badge">7</div><div><div class="step-time">6:45 PM – 6:55 PM</div><div class="step-title">Reset & Refocus (Distillery Prep)</div></div><div class="caret">▾</div></button>
+            <div class="step-body"><div class="split"><div class="action-card"><strong>For guests</strong><ul><li>Quick bathroom break</li><li>Drink refills</li></ul></div><div class="action-card"><strong>For you (head to Distillery early)</strong><ul><li>Dealers set & ready</li><li>Orange Vanilla Zyngah shots prepped</li><li>Moscow Mule ready for Yaron</li></ul></div></div><div class="checklist"><label class="check-item"><input type="checkbox" data-check="reset-1"><span>Dealers in place, tables inviting.</span></label><label class="check-item"><input type="checkbox" data-check="reset-2"><span>Tournament area looks great and ready.</span></label><label class="check-item"><input type="checkbox" data-check="reset-3"><span>Shots lined up for that grand entrance.</span></label><label class="check-item"><input type="checkbox" data-check="reset-4"><span>Yaron’s Moscow Mule — ready to serve.</span></label></div></div>
+          </article>
+
+          <article class="step">
+            <button class="step-head" type="button"><div class="step-badge">8</div><div><div class="step-time">6:55 PM – 7:00 PM</div><div class="step-title">Move to Distillery</div></div><div class="caret">▾</div></button>
+            <div class="step-body"><div class="checklist"><label class="check-item"><input type="checkbox" data-check="move-1"><span>Lead the group to the Distillery with energy.</span></label><label class="check-item"><input type="checkbox" data-check="move-2"><span>Frank stays with the group — keep the momentum friendly.</span></label><label class="check-item"><input type="checkbox" data-check="move-3"><span>Keep the transition light, fun, and effortless.</span></label></div></div>
+          </article>
+
+          <article class="step">
+            <button class="step-head" type="button"><div class="step-badge">9</div><div><div class="step-time">7:00 PM – 7:05 PM</div><div class="step-title">Entry Moment + Tournament Overview</div></div><div class="caret">▾</div></button>
+            <div class="step-body"><div class="checklist"><label class="check-item"><input type="checkbox" data-check="intro-1"><span>Guests walk in to welcome shots — instant celebration.</span></label><label class="check-item"><input type="checkbox" data-check="intro-2"><span>Dealer or Mark gives a quick, fun tournament breakdown.</span></label></div></div>
+          </article>
+
+          <article class="step">
+            <button class="step-head" type="button"><div class="step-badge">10</div><div><div class="step-time">7:05 PM – 7:50 PM</div><div class="step-title">Tournament & Good Times</div></div><div class="caret">▾</div></button>
+            <div class="step-body"><div class="checklist"><label class="check-item"><input type="checkbox" data-check="tourney-1"><span>Let the fun flow — you’re there to enjoy and support, not micromanage.</span></label><label class="check-item"><input type="checkbox" data-check="tourney-2"><span>Grab a few photos or short clips when the energy peaks.</span></label><label class="check-item"><input type="checkbox" data-check="tourney-3"><span>Keep everything offline — the memories will be shared later.</span></label></div></div>
+          </article>
+
+          <article class="step">
+            <button class="step-head" type="button"><div class="step-badge">11</div><div><div class="step-time">7:50 PM – 8:00 PM</div><div class="step-title">Awards & Farewell</div></div><div class="caret">▾</div></button>
+            <div class="step-body"><div class="checklist"><label class="check-item"><input type="checkbox" data-check="awards-1"><span>Frank presents whisky glass + cigar to the winner — a special moment.</span></label><label class="check-item"><input type="checkbox" data-check="awards-2"><span>Frank gives everyone a signed copy of his book (such a treat!).</span></label><label class="check-item"><input type="checkbox" data-check="awards-3"><span>Every guest receives a deck of playing cards — a sweet keepsake.</span></label><label class="check-item"><input type="checkbox" data-check="awards-4"><span>Walk guests to the door so they can hop on the party bus.</span></label><label class="check-item"><input type="checkbox" data-check="awards-5"><span>If the swag bag feels heavy, ask a dealer or Mark to lend a hand.</span></label></div></div>
+          </article>
+
+          <article class="step">
+            <button class="step-head" type="button"><div class="step-badge">12</div><div><div class="step-time">8:00 PM – Wrap</div><div class="step-title">Post-Event Wind-Down</div></div><div class="caret">▾</div></button>
+            <div class="step-body"><div class="checklist"><label class="check-item"><input type="checkbox" data-check="wrap-1"><span>Collect and box up all Zynga chips — they'll be shipped to the office later.</span></label><label class="check-item"><input type="checkbox" data-check="wrap-2"><span>Take the chips with you for safekeeping.</span></label><label class="check-item"><input type="checkbox" data-check="wrap-3"><span>Forward photos and videos to us after the event (or to Shelly if she asks).</span></label></div></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      Keep transitions early, stay calm, move the group forward — call Matt if anything gets wobbly.
+    </div>
+  </main>
+
+  <script>
+    (function() {
+      // ========== CONTACT DROPDOWN WITH BUSINESS CONNECTION ==========
+      const contactsData = [
+        { name: "Matt Carpenter", role: "Las Vegas Poker Training", phone: "616-745-7148", email: "book@pokertraininglasvegas.com", note: "" },
+        { name: "Shelly Wienberg", role: "Zynga", phone: "", email: "swienberg@zynga.com", note: "If she’s not on-site, she’ll appreciate media forwarded." },
+        { name: "Christi Toureen", role: "Mob Museum | On-Site Event Manager", phone: "702-574-9378", email: "ctoureen@themobmuseum.org", note: "Your museum point person — super helpful!" },
+        { name: "Jessica Fernandez", role: "Mob Museum | Sales Manager", phone: "702-724-8671", email: "jfernandez@themobmuseum.org", note: "Great for venue coordination." }
+      ];
+      const contactSelect = document.getElementById('contactSelect');
+      const contactDetailDiv = document.getElementById('contactDetail');
+
+      // Build dropdown with "Name - Role"
+      contactsData.forEach((contact, idx) => {
+        const option = document.createElement('option');
+        option.value = idx;
+        option.textContent = `${contact.name} - ${contact.role}`;
+        contactSelect.appendChild(option);
+      });
+      
+      function renderContactDetail(contact) {
+        let phoneHtml = contact.phone ? `<div class="contact-detail-line">Phone: <a href="tel:${contact.phone.replace(/\D/g, '')}">${contact.phone}</a></div>` : '';
+        let emailHtml = contact.email ? `<div class="contact-detail-line">Email: <a href="mailto:${contact.email}">${contact.email}</a></div>` : '';
+        let noteHtml = contact.note ? `<div class="contact-note">${contact.note}</div>` : '';
+        contactDetailDiv.innerHTML = `
+          <div class="contact-detail-name">${contact.name}</div>
+          <div class="contact-detail-role">${contact.role}</div>
+          ${phoneHtml}
+          ${emailHtml}
+          ${noteHtml}
+        `;
+      }
+      
+      contactSelect.value = "0";
+      renderContactDetail(contactsData[0]);
+      contactSelect.addEventListener('change', (e) => {
+        const idx = parseInt(e.target.value, 10);
+        renderContactDetail(contactsData[idx]);
+      });
+
+      // ========== CHECKLIST & LOCALSTORAGE ==========
+      const STORAGE_KEY = 'mulan_zynga_mob_museum_checks_v4';
+      const stepEls = Array.from(document.querySelectorAll('.step'));
+      const checkboxes = Array.from(document.querySelectorAll('input[type="checkbox"][data-check]'));
+      const progressChip = document.getElementById('progressChip');
+      const expandAllBtn = document.getElementById('expandAllBtn');
+      const collapseAllBtn = document.getElementById('collapseAllBtn');
+      const resetChecksBtn = document.getElementById('resetChecksBtn');
+      const printBtn = document.getElementById('printBtn');
+
+      function getSavedChecks() {
+        try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch(e) { return {}; }
+      }
+      function saveChecks(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+      function updateCheckVisual(checkbox) {
+        const wrapper = checkbox.closest('.check-item');
+        if (wrapper) wrapper.classList.toggle('done', checkbox.checked);
+      }
+      function updateProgress() {
+        const total = checkboxes.length;
+        const done = checkboxes.filter(cb => cb.checked).length;
+        progressChip.textContent = `${done} of ${total} tasks complete`;
+      }
+
+      function initChecks() {
+        const saved = getSavedChecks();
+        checkboxes.forEach((checkbox) => {
+          const key = checkbox.dataset.check;
+          if (saved.hasOwnProperty(key)) checkbox.checked = saved[key];
+          updateCheckVisual(checkbox);
+          checkbox.addEventListener('change', () => {
+            const fresh = getSavedChecks();
+            fresh[key] = checkbox.checked;
+            saveChecks(fresh);
+            updateCheckVisual(checkbox);
+            updateProgress();
+          });
+        });
+        updateProgress();
+      }
+
+      function setAllSteps(openState) { stepEls.forEach(step => step.classList.toggle('open', openState)); }
+      stepEls.forEach(step => {
+        const head = step.querySelector('.step-head');
+        if (head) head.addEventListener('click', () => step.classList.toggle('open'));
+      });
+
+      expandAllBtn.addEventListener('click', () => setAllSteps(true));
+      collapseAllBtn.addEventListener('click', () => setAllSteps(false));
+      resetChecksBtn.addEventListener('click', () => {
+        if (!confirm('Reset all checklists? Progress will be cleared.')) return;
+        localStorage.removeItem(STORAGE_KEY);
+        checkboxes.forEach(cb => { cb.checked = false; updateCheckVisual(cb); });
+        updateProgress();
+      });
+      printBtn.addEventListener('click', () => window.print());
+
+      // keep rendering crisp
+      window.addEventListener('resize', () => { document.body.style.transform = 'translateZ(0)'; void document.body.offsetHeight; document.body.style.transform = ''; });
+      
+      initChecks();
+    })();
+  </script>
+</body>
+</html>
