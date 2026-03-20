@@ -73,11 +73,12 @@
       cursor: pointer;
     }
 
+    /* Dropdown with clear arrow space - no overlap on mobile */
     select {
       background: linear-gradient(180deg, var(--card), var(--card-2));
       border: 1px solid var(--line);
       border-radius: 48px;
-      padding: 12px 16px;
+      padding: 12px 40px 12px 16px;  /* extra right padding for custom arrow */
       color: var(--text);
       font-weight: 500;
       width: 100%;
@@ -86,6 +87,27 @@
       background-repeat: no-repeat;
       background-position: right 16px center;
       background-size: 18px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    /* Ensure long option text doesn't break layout */
+    select option {
+      white-space: normal;
+      word-break: break-word;
+    }
+
+    /* Press effect for all buttons */
+    .btn, .step-head {
+      transition: transform 0.05s ease, opacity 0.1s ease;
+    }
+    .btn:active {
+      transform: scale(0.97);
+      opacity: 0.9;
+    }
+    .step-head:active {
+      transform: scale(0.99);
+      background: linear-gradient(180deg, rgba(214,168,79,0.2), rgba(255,255,255,0.04));
     }
     /* =========================
        BLOCK 2 END - BASE
@@ -282,6 +304,7 @@
       background: linear-gradient(180deg, rgba(214,168,79,0.1), rgba(255,255,255,0.02));
       text-align: left;
       font-weight: 600;
+      cursor: pointer;
     }
 
     .step-badge {
@@ -386,7 +409,8 @@
       font-weight: 800;
       font-size: 0.9rem;
       box-shadow: 0 8px 18px rgba(214,168,79,0.25);
-      transition: 0.1s linear;
+      transition: transform 0.05s ease, opacity 0.1s ease;
+      cursor: pointer;
     }
 
     .btn.alt {
@@ -452,6 +476,11 @@
         flex-direction: column;
         align-items: flex-start;
       }
+      /* extra safety for dropdown arrow on mobile */
+      select {
+        padding: 12px 40px 12px 16px;
+        font-size: 0.95rem;
+      }
     }
     /* =========================
        BLOCK 5 END - TIMELINE / CHECKLIST
@@ -460,7 +489,7 @@
 </head>
 <body>
   <main class="app">
-    <!-- HERO SECTION - CLEAN, NO EMOJIS, NO "You've got this!" -->
+    <!-- HERO SECTION -->
     <section class="panel hero">
       <div class="panel-inner">
         <h1>Zynga Mob Museum<br>Mulan Run of Show</h1>
@@ -470,6 +499,7 @@
         </p>
         <div class="meta-grid">
           <div class="pill"><div class="label">Date</div><div class="value">Thursday, March 26, 2026</div></div>
+          <div class="pill"><div class="label">Time</div><div class="value">4:30 PM – 8:00 PM</div></div>
           <div class="pill"><div class="label">Venue</div><div class="value">Mob Museum</div></div>
           <div class="pill"><div class="label">Spaces</div><div class="value">Oscar B. Goodman Room + Distillery</div></div>
           <div class="pill"><div class="label">Role</div><div class="value">Mulan | On-Site Liaison</div></div>
@@ -528,12 +558,12 @@
           <div class="status-chip warn">Stay 5–10 minutes ahead to keep everything smooth.</div>
         </div>
         <div class="callout">
-          We know you are going to make this an awesome experience — trust your instincts and enjoy the night.
+          We know you are going to make this an awesome experience — enjoy the night.
         </div>
       </div>
     </section>
 
-    <!-- TIMELINE CHECKLIST (NO EMOJIS, TIMES YELLOW, TITLES RED) -->
+    <!-- TIMELINE CHECKLIST (TIMES YELLOW, TITLES RED) -->
     <section class="panel">
       <div class="panel-inner">
         <h2 class="section-title">Timeline Checklist</h2>
@@ -624,7 +654,7 @@
     </section>
 
     <div class="footer-note">
-      Keep transitions early, stay calm, move the group forward — call Matt if anything gets wobbly.
+      Keep transitions early, stay calm, move the group forward — call Matt if anything gets wobbly. Thank you.
     </div>
   </main>
 
@@ -669,7 +699,7 @@
       });
 
       // ========== CHECKLIST & LOCALSTORAGE ==========
-      const STORAGE_KEY = 'mulan_zynga_mob_museum_checks_v4';
+      const STORAGE_KEY = 'mulan_zynga_mob_museum_checks_v5';
       const stepEls = Array.from(document.querySelectorAll('.step'));
       const checkboxes = Array.from(document.querySelectorAll('input[type="checkbox"][data-check]'));
       const progressChip = document.getElementById('progressChip');
