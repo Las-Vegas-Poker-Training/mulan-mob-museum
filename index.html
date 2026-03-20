@@ -482,6 +482,75 @@
         font-size: 0.95rem;
       }
     }
+
+    /* =========================
+       PRINT STYLES: Ensure all timeline content is fully expanded and visible
+       ========================= */
+    @media print {
+      /* Force all step bodies to be visible */
+      .step-body {
+        display: block !important;
+      }
+      /* Hide interactive elements that clutter print */
+      .step-head .caret,
+      .step-head button,
+      .action-row,
+      .btn,
+      .status-bar .status-chip.warn,
+      .callout,
+      .step-head {
+        cursor: default;
+      }
+      /* Make step heads readable without button styling */
+      .step-head {
+        background: none;
+        padding: 8px 0;
+        border: none;
+        grid-template-columns: auto 1fr;
+      }
+      .step-head .caret {
+        display: none;
+      }
+      /* Ensure checkboxes appear */
+      .check-item input[type="checkbox"] {
+        opacity: 1;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      /* Keep card backgrounds white for ink saving */
+      body, .panel, .panel-inner, .step, .step-body, .check-item {
+        background: white;
+        color: black;
+        border-color: #ccc;
+        box-shadow: none;
+      }
+      .step-time {
+        color: #b78b38; /* dark yellow for print */
+      }
+      .step-title {
+        color: #DC0606;
+      }
+      .step-badge {
+        background: #eee;
+        border-color: #DC0606;
+        color: #DC0606;
+      }
+      a {
+        color: black;
+        text-decoration: none;
+      }
+      .pill, .note-card, .action-card, .contact-detail-card {
+        background: white;
+        border: 1px solid #ddd;
+      }
+      .meta-grid, .two-col {
+        break-inside: avoid;
+      }
+      .step {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+    }
     /* =========================
        BLOCK 5 END - TIMELINE / CHECKLIST
        ========================= */
@@ -507,7 +576,7 @@
       </div>
     </section>
 
-    <!-- CONTACT SECTION: DROPDOWN WITH BUSINESS CONNECTION (NO EMOJIS) -->
+    <!-- CONTACT SECTION: DROPDOWN WITH BUSINESS CONNECTION -->
     <section class="panel">
       <div class="panel-inner compact-contact">
         <h2 class="section-title" style="margin-bottom: 12px;">Your Support Team</h2>
@@ -521,7 +590,7 @@
       </div>
     </section>
 
-    <!-- QUICK NOTES + PHOTO GUIDANCE (NO EMOJIS) -->
+    <!-- QUICK NOTES + PHOTO GUIDANCE -->
     <section class="panel">
       <div class="panel-inner two-col">
         <article class="note-card">
@@ -543,7 +612,7 @@
       </div>
     </section>
 
-    <!-- QUICK ACTIONS + ENCOURAGING STATUS (NO EMOJIS) -->
+    <!-- QUICK ACTIONS + STATUS -->
     <section class="panel">
       <div class="panel-inner">
         <h2 class="section-title">Quick Helpers</h2>
