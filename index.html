@@ -484,9 +484,14 @@
     }
 
     /* =========================
-       PRINT STYLES: Ensure all timeline content is fully expanded and visible
+       PRINT STYLES: Ensure all timeline content is fully expanded and visible, no cutoffs
        ========================= */
     @media print {
+      /* Page margins to avoid cutoffs on mobile/desktop */
+      @page {
+        margin: 0.75in 0.5in;
+        size: auto;
+      }
       /* Force all step bodies to be visible */
       .step-body {
         display: block !important;
@@ -576,7 +581,7 @@
       </div>
     </section>
 
-    <!-- CONTACT SECTION: DROPDOWN WITH BUSINESS CONNECTION -->
+    <!-- CONTACT SECTION: DROPDOWN WITH BUSINESS CONNECTION (INCLUDING MARK) -->
     <section class="panel">
       <div class="panel-inner compact-contact">
         <h2 class="section-title" style="margin-bottom: 12px;">Your Support Team</h2>
@@ -729,12 +734,13 @@
 
   <script>
     (function() {
-      // ========== CONTACT DROPDOWN WITH BUSINESS CONNECTION ==========
+      // ========== CONTACT DROPDOWN WITH BUSINESS CONNECTION (ADDED MARK) ==========
       const contactsData = [
         { name: "Matt Carpenter", role: "Las Vegas Poker Training", phone: "616-745-7148", email: "book@pokertraininglasvegas.com", note: "" },
         { name: "Shelly Wienberg", role: "Zynga", phone: "", email: "swienberg@zynga.com", note: "If she’s not on-site, she’ll appreciate media forwarded." },
         { name: "Christi Toureen", role: "Mob Museum | On-Site Event Manager", phone: "702-574-9378", email: "ctoureen@themobmuseum.org", note: "Your museum point person — super helpful!" },
-        { name: "Jessica Fernandez", role: "Mob Museum | Sales Manager", phone: "702-724-8671", email: "jfernandez@themobmuseum.org", note: "Great for venue coordination." }
+        { name: "Jessica Fernandez", role: "Mob Museum | Sales Manager", phone: "702-724-8671", email: "jfernandez@themobmuseum.org", note: "Great for venue coordination." },
+        { name: "Mark Collingbourne", role: "Tournament Director", phone: "702-501-6054", email: "", note: "Tournament lead — reach out for any poker-related needs." }
       ];
       const contactSelect = document.getElementById('contactSelect');
       const contactDetailDiv = document.getElementById('contactDetail');
@@ -768,7 +774,7 @@
       });
 
       // ========== CHECKLIST & LOCALSTORAGE ==========
-      const STORAGE_KEY = 'mulan_zynga_mob_museum_checks_v5';
+      const STORAGE_KEY = 'mulan_zynga_mob_museum_checks_v6';
       const stepEls = Array.from(document.querySelectorAll('.step'));
       const checkboxes = Array.from(document.querySelectorAll('input[type="checkbox"][data-check]'));
       const progressChip = document.getElementById('progressChip');
